@@ -1,0 +1,198 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/login": {
+      "post": {
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ]
+      }
+    },
+    "/api/v1/rules/create": {
+      "post": {
+        "summary": "创建规则",
+        "operationId": "Create",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateRuleRequest"
+            }
+          }
+        ],
+        "tags": [
+          "rule"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateRuleRequest": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "graph": {
+          "$ref": "#/definitions/Graph"
+        }
+      },
+      "title": "CreateRuleRequest",
+      "required": [
+        "id",
+        "name",
+        "graph"
+      ]
+    },
+    "CreateRuleResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "CreateRuleResponse",
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Graph": {
+      "type": "object",
+      "properties": {
+        "nodes": {
+          "$ref": "#/definitions/mapstringNode"
+        },
+        "topo": {
+          "$ref": "#/definitions/Topology"
+        }
+      },
+      "title": "Graph",
+      "required": [
+        "nodes",
+        "topo"
+      ]
+    },
+    "LoginRequest": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "LoginRequest",
+      "required": [
+        "name"
+      ]
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      },
+      "title": "LoginResponse",
+      "required": [
+        "message"
+      ]
+    },
+    "Node": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": " source/operator/sink"
+        },
+        "nodeType": {
+          "type": "string",
+          "description": " mqtt/filter等"
+        },
+        "props": {
+          "$ref": "#/definitions/mapstringinterface",
+          "description": " \"expr\": \"humidity \u003e 30\""
+        }
+      },
+      "title": "Node",
+      "required": [
+        "type",
+        "nodeType",
+        "props"
+      ]
+    },
+    "Topology": {
+      "type": "object",
+      "properties": {
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "edges": {
+          "$ref": "#/definitions/mapstring[]string"
+        }
+      },
+      "title": "Topology",
+      "required": [
+        "sources",
+        "edges"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

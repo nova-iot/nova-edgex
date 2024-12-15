@@ -1,0 +1,43 @@
+syntax = "v1"
+
+info(
+	title: "rule"
+	desc: "rule engine management"
+)
+
+type CreateRuleRequest {
+    Id   string `json:"id"`
+    Name string `json:"name"`
+    Graph Graph `json:"graph"`
+}
+
+type Graph {
+    Nodes map[string]Node `json:"nodes"`
+    Topo  Topology       `json:"topo"`
+}
+
+type Node {
+    Type     string                 `json:"type"`      // source/operator/sink
+    NodeType string                 `json:"nodeType"`  // mqtt/filter等
+    Props    map[string]interface{} `json:"props"` // "expr": "humidity > 30"
+}
+
+type Topology {
+    Sources []string            `json:"sources"`
+    Edges   map[string][]string `json:"edges"`
+}
+
+type CreateRuleResponse {
+	Id string `json:"id"`
+	Name string `json:"name"`
+}
+
+@server(
+	prefix: /api/v1/rules
+	group: rule
+)
+service novaedgex-api {
+	@doc "创建规则"
+	@handler Create
+	post /create(CreateRuleRequest)
+}
